@@ -11,6 +11,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import uk.ac.tees.mad.projecthub.screens.LoginScreen
+import uk.ac.tees.mad.projecthub.screens.SplashScreen
 import uk.ac.tees.mad.projecthub.ui.theme.ProjectHubTheme
 
 class MainActivity : ComponentActivity() {
@@ -19,7 +21,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             ProjectHubTheme {
-
+                LoginScreen()
             }
         }
     }
