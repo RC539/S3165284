@@ -12,9 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
@@ -25,6 +23,7 @@ import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material.icons.rounded.Email
 import androidx.compose.material.icons.rounded.Lock
+import androidx.compose.material.icons.rounded.Person4
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
@@ -34,8 +33,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -47,89 +46,87 @@ import androidx.compose.ui.unit.sp
 import uk.ac.tees.mad.projecthub.R
 import uk.ac.tees.mad.projecthub.ui.theme.poppins
 
-
 @Composable
-fun LoginScreen() {
+fun SignupScreen() {
+    val name = remember { mutableStateOf("") }
     val email = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
     val passwordVisible = remember { mutableStateOf(false) }
-    Column(modifier = Modifier.fillMaxSize()) {
-        val gradientColor = listOf(Color.Cyan, Color.Blue)
-        Box(
+    val gradientColor = listOf(Color.Blue, Color.White)
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(brush = Brush.verticalGradient(gradientColor))
+    ) {
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .height(250.dp)
-        ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(brush = Brush.sweepGradient(gradientColor))
-            ) {}
-            Column(modifier = Modifier.statusBarsPadding()) {
-                Row(modifier = Modifier.padding(top = 40.dp, start = 20.dp)) {
-                    Image(
-                        painter = painterResource(id = R.drawable.project),
-                        contentDescription = null,
-                        modifier = Modifier
-                            .size(40.dp)
-                            .clip(
-                                CircleShape
-                            )
-                            .background(Color.White)
-                    )
-                    Spacer(modifier = Modifier.width(10.dp))
-                    Text(
-                        text = "Project Hub",
-                        fontFamily = poppins,
-                        fontWeight = FontWeight.SemiBold,
-                        fontSize = 22.sp,
-                        color = Color.White,
-                        modifier = Modifier.align(Alignment.CenterVertically)
-                    )
-                }
-                Spacer(modifier = Modifier.height(25.dp))
-                Text(
-                    text = "Begin your journey with Project Hub today.",
-                    fontFamily = poppins,
-                    fontWeight = FontWeight.SemiBold,
-                    fontSize = 28.sp,
-                    color = Color.White,
-                    lineHeight = 34.sp,
-                    modifier = Modifier.padding(horizontal = 22.dp)
+                .fillMaxSize()
+                .padding(horizontal = 30.dp, vertical = 70.dp)
+                .shadow(
+                    elevation = 10.dp,
+                    shape = RoundedCornerShape(30.dp)
                 )
-            }
-        }
-        Column(modifier = Modifier.padding(18.dp)) {
+                .clip(
+                    RoundedCornerShape(30.dp)
+                )
+                .background(Color.White)
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.project), contentDescription = null,
+                modifier = Modifier
+                    .padding(18.dp)
+                    .size(50.dp)
+            )
+            Text(
+                text = "Sign up to start using the App.",
+                fontFamily = poppins,
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 28.sp,
+                lineHeight = 34.sp,
+                modifier = Modifier.padding(horizontal = 10.dp)
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = "Let's sign in to your account and get started.",
+                fontFamily = poppins,
+                modifier = Modifier.padding(horizontal = 10.dp)
+            )
             Spacer(modifier = Modifier.height(30.dp))
             Text(
-                text = "Sign In To Your Account.",
-                fontFamily = poppins,
-                fontWeight = FontWeight.Bold,
-                fontSize = 23.sp,
-                color = MaterialTheme.colors.onBackground
-
+                text = "Name", fontFamily = poppins, fontWeight = FontWeight.SemiBold,
+                color = MaterialTheme.colors.onBackground,
+                modifier = Modifier.padding(horizontal = 20.dp)
             )
-            Text(text = "Let's sign in to your account and get started.")
-            Spacer(modifier = Modifier.height(30.dp))
+            OutlinedTextField(
+                value = name.value,
+                onValueChange = { name.value = it },
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 10.dp),
+                shape = RoundedCornerShape(28.dp),
+                placeholder = { Text(text = "Your Name", color = Color.LightGray) },
+                leadingIcon = { Icon(imageVector = Icons.Rounded.Person4, contentDescription = null) }
+            )
+            Spacer(modifier = Modifier.height(10.dp))
             Text(
                 text = "Email Address", fontFamily = poppins, fontWeight = FontWeight.SemiBold,
-                color = MaterialTheme.colors.onBackground
+                color = MaterialTheme.colors.onBackground,
+                modifier = Modifier.padding(horizontal = 20.dp)
             )
             OutlinedTextField(
                 value = email.value,
                 onValueChange = { email.value = it },
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 10.dp),
                 shape = RoundedCornerShape(28.dp),
                 placeholder = { Text(text = "elementary221b@gmail.com", color = Color.LightGray) },
                 leadingIcon = { Icon(imageVector = Icons.Rounded.Email, contentDescription = null) }
             )
             Spacer(modifier = Modifier.height(10.dp))
-            Text(text = "Password", fontFamily = poppins, fontWeight = FontWeight.SemiBold)
+            Text(text = "Password", fontFamily = poppins, fontWeight = FontWeight.SemiBold,
+                modifier = Modifier.padding(horizontal = 20.dp))
             OutlinedTextField(
                 value = password.value,
                 onValueChange = { password.value = it },
                 modifier = Modifier
-                    .fillMaxWidth(),
+                    .fillMaxWidth().padding(horizontal = 10.dp),
                 shape = RoundedCornerShape(28.dp),
                 placeholder = {
                     Spacer(modifier = Modifier.width(10.dp))
@@ -150,13 +147,13 @@ fun LoginScreen() {
             Spacer(modifier = Modifier.height(30.dp))
             Button(
                 onClick = { /*TODO*/ },
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 10.dp),
                 colors = ButtonDefaults.buttonColors(Color.Blue),
                 shape = RoundedCornerShape(28.dp)
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(
-                        text = "Sign in",
+                        text = "Sign Up",
                         fontFamily = poppins,
                         color = Color.White,
                         fontSize = 22.sp,
@@ -171,8 +168,8 @@ fun LoginScreen() {
             }
             Spacer(modifier = Modifier.height(30.dp))
             Row(modifier = Modifier.fillMaxWidth(),horizontalArrangement = Arrangement.Center) {
-                Text(text = "Don't have an account?",fontFamily = poppins, fontWeight = FontWeight.SemiBold)
-                Text(text = "Sign Up", color = Color.Blue, fontFamily = poppins, fontWeight = FontWeight.SemiBold)
+                Text(text = "Already have an account?",fontFamily = poppins, fontWeight = FontWeight.SemiBold)
+                Text(text = "Log in", color = Color.Blue, fontFamily = poppins, fontWeight = FontWeight.SemiBold)
             }
         }
     }
