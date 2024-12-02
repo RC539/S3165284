@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "609551524537",
+    "project_id": "projecthub-42955",
+    "storage_bucket": "projecthub-42955.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:609551524537:android:ebbee80647034fa987b168",
+        "android_client_info": {
+          "package_name": "uk.ac.tees.mad.projecthub"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA5_nuXXmjyP2MOCjzDxQIc930SfbNz-YA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

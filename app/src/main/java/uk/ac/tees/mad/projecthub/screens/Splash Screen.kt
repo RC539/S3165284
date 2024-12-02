@@ -1,6 +1,5 @@
 package uk.ac.tees.mad.projecthub.screens
 
-import androidx.compose.animation.Animatable
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -22,11 +21,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import kotlinx.coroutines.delay
 import uk.ac.tees.mad.projecthub.R
+import uk.ac.tees.mad.projecthub.navigation.NavigationDestination
+import uk.ac.tees.mad.projecthub.viewmodels.AuthenticationViewModel
 
 @Composable
-fun SplashScreen() {
+fun SplashScreen(navController: NavController, authvm: AuthenticationViewModel) {
     val scale = remember {
         androidx.compose.animation.core.Animatable(0f)
     }
@@ -64,6 +66,7 @@ fun SplashScreen() {
                 easing = androidx.compose.animation.core.EaseInOutBounce
             )
         )
+        navController.navigate(NavigationDestination.LoginScreen.name)
     }
     Column(modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,

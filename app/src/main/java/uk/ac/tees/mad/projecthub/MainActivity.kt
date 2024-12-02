@@ -13,18 +13,21 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import dagger.hilt.android.AndroidEntryPoint
+import uk.ac.tees.mad.projecthub.navigation.ProjectHubNavigation
 import uk.ac.tees.mad.projecthub.screens.LoginScreen
 import uk.ac.tees.mad.projecthub.screens.SignupScreen
 import uk.ac.tees.mad.projecthub.screens.SplashScreen
 import uk.ac.tees.mad.projecthub.ui.theme.ProjectHubTheme
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             ProjectHubTheme(){
-                SignupScreen()
+                ProjectHubNavigation()
             }
         }
     }

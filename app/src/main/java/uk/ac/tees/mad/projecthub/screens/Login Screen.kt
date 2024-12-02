@@ -2,6 +2,7 @@ package uk.ac.tees.mad.projecthub.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -34,7 +35,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -44,12 +44,15 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import uk.ac.tees.mad.projecthub.R
+import uk.ac.tees.mad.projecthub.navigation.NavigationDestination
 import uk.ac.tees.mad.projecthub.ui.theme.poppins
+import uk.ac.tees.mad.projecthub.viewmodels.AuthenticationViewModel
 
 
 @Composable
-fun LoginScreen() {
+fun LoginScreen(navController: NavController, authvm: AuthenticationViewModel) {
     val email = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
     val passwordVisible = remember { mutableStateOf(false) }
@@ -172,7 +175,10 @@ fun LoginScreen() {
             Spacer(modifier = Modifier.height(30.dp))
             Row(modifier = Modifier.fillMaxWidth(),horizontalArrangement = Arrangement.Center) {
                 Text(text = "Don't have an account?",fontFamily = poppins, fontWeight = FontWeight.SemiBold)
-                Text(text = "Sign Up", color = Color.Blue, fontFamily = poppins, fontWeight = FontWeight.SemiBold)
+                Text(text = "Sign Up", color = Color.Blue, fontFamily = poppins, fontWeight = FontWeight.SemiBold,
+                    modifier = Modifier.clickable {
+                        navController.navigate(NavigationDestination.SignupScreen.name)
+                    })
             }
         }
     }
