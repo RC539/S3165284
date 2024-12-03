@@ -1,5 +1,6 @@
 package uk.ac.tees.mad.projecthub.screens
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -38,6 +39,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -53,9 +55,17 @@ import uk.ac.tees.mad.projecthub.viewmodels.AuthenticationViewModel
 
 @Composable
 fun LoginScreen(navController: NavController, authvm: AuthenticationViewModel) {
+    val context = LocalContext.current
+    val loading = authvm.loading.value
+    val loggedIn = authvm.isUserSignedIn.value
     val email = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
     val passwordVisible = remember { mutableStateOf(false) }
+    if (loggedIn) {
+        navController.navigate(NavigationDestination.HomeScreen.name){
+            popUpTo(0)
+        }
+    }
     Column(modifier = Modifier.fillMaxSize()) {
         val gradientColor = listOf(Color.Cyan, Color.Blue)
         Box(
@@ -152,7 +162,15 @@ fun LoginScreen(navController: NavController, authvm: AuthenticationViewModel) {
             )
             Spacer(modifier = Modifier.height(30.dp))
             Button(
-                onClick = { /*TODO*/ },
+                onClick = { authvm.logIn(email.value, password.value, onResult = { isSuccess, message ->
+                    if (isSuccess) {
+                        navController.navigate(NavigationDestination.HomeScreen.name){
+                            popUpTo(0)
+                        }
+                    } else {
+                        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+                    }
+                }) },
                 modifier = Modifier.fillMaxWidth(),
                 colors = ButtonDefaults.buttonColors(Color.Blue),
                 shape = RoundedCornerShape(28.dp)

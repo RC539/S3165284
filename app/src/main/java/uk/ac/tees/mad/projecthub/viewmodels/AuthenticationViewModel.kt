@@ -10,15 +10,44 @@ import javax.inject.Inject
 @HiltViewModel
 class AuthenticationViewModel
      @Inject constructor(
-     private val authentication : FirebaseAuth
+     private val authentication : FirebaseAuth,
      ): ViewModel()
-{ val isUserSignedIn = mutableStateOf(false)
+{
+          val loading = mutableStateOf(false)
+          val isUserSignedIn = mutableStateOf(false)
      init {
           if(authentication.currentUser != null){
                isUserSignedIn.value = true
           }
      }
-     fun signUp(context: Context, email: String, password : String){
+     fun signUp(name: String, email: String, password: String, onResult: (Boolean, String?) -> Unit) {
+          loading.value = true
+          authentication.createUserWithEmailAndPassword(email, password)
+               .addOnSuccessListener { authResult ->
+                    val uid = authResult.user?.uid
+                    if (uid != null) {
+                        // mainViewModel.createUserOnFirestore(uid, name, email, password)
+                         onResult(true, null)
+                         isUserSignedIn.value = true
+                    } else {
+                         onResult(false, "User ID not found")
+                    }
+               }
+               .addOnFailureListener { exception ->
+                    loading.value = false
+                    onResult(false, exception.message)
+               }
 
+     }
+
+     fun logIn(email: String, password: String, onResult: (Boolean, String?) -> Unit) {
+          loading.value = true
+          authentication.signInWithEmailAndPassword(email, password).addOnSuccessListener {
+               onResult(true, null)
+               isUserSignedIn.value = true
+          }.addOnFailureListener { exception ->
+               loading.value = false
+               onResult(false, exception.message)
+          }
      }
 }
