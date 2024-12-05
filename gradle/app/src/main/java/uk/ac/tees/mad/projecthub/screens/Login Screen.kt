@@ -56,12 +56,12 @@ import uk.ac.tees.mad.projecthub.viewmodels.AuthenticationViewModel
 @Composable
 fun LoginScreen(navController: NavController, authvm: AuthenticationViewModel) {
     val context = LocalContext.current
-    val loading = authvm.loading.value
-    val loggedIn = authvm.isUserSignedIn.value
+    val loading = authvm.loading
+    val loggedIn = authvm.isUserSignedIn
     val email = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
     val passwordVisible = remember { mutableStateOf(false) }
-    if (loggedIn) {
+    if (loggedIn.value) {
         navController.navigate(NavigationDestination.HomeScreen.name){
             popUpTo(0)
         }

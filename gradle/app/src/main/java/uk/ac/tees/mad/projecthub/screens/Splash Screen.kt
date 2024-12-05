@@ -29,6 +29,7 @@ import uk.ac.tees.mad.projecthub.viewmodels.AuthenticationViewModel
 
 @Composable
 fun SplashScreen(navController: NavController, authvm: AuthenticationViewModel) {
+    val isSigned = authvm.isUserSignedIn
     val scale = remember {
         androidx.compose.animation.core.Animatable(0f)
     }
@@ -66,7 +67,13 @@ fun SplashScreen(navController: NavController, authvm: AuthenticationViewModel) 
                 easing = androidx.compose.animation.core.EaseInOutBounce
             )
         )
-        navController.navigate(NavigationDestination.LoginScreen.name)
+        if (isSigned.value) {
+            navController.navigate(NavigationDestination.HomeScreen.name){
+                popUpTo(0)
+            }
+        }else {
+            navController.navigate(NavigationDestination.LoginScreen.name)
+        }
     }
     Column(modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
