@@ -1,5 +1,6 @@
 package uk.ac.tees.mad.projecthub.viewmodels
 
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -12,9 +13,8 @@ class MainViewModel @Inject constructor(
     private val userRepository: UserRepository
 ) : ViewModel() {
 
-    fun createUserOnFirestore(uid: String?, name: String, email: String, password: String) {
-        userRepository.createUserOnFirestore(uid, name, email, password) { success ->
 
-        }
+    fun addProject(projectName: String, projectDescription: String, requiredSkills: String, deadline: String, budget: String, value: Uri?) {
+        val storageRef = FirebaseStorage.getInstance().reference
     }
 }

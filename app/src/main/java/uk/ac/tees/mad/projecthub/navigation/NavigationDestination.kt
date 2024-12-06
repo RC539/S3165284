@@ -4,5 +4,6 @@ enum class NavigationDestination {
     SplashScreen,
     LoginScreen,
     SignupScreen,
-    HomeScreen
+    HomeScreen,
+    AddProjectScreen,
 }
