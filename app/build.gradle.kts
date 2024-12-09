@@ -60,7 +60,8 @@ dependencies {
     implementation("androidx.compose.material3:material3:1.3.0")
     implementation(libs.androidx.navigation.compose)
     implementation(libs.firebase.auth)
-    implementation(libs.firebase.firestore) // Check the latest version
+    implementation(libs.firebase.firestore)
+    implementation(libs.firebase.storage) // Check the latest version
 
 
     val nav_version = "2.7.7"
