@@ -45,7 +45,7 @@ import uk.ac.tees.mad.projecthub.viewmodels.MainViewModel
 import java.io.File
 
 @Composable
-fun AddProjectScreen(navController: NavHostController, mainVm : MainViewModel) {
+fun AddProjectScreen(navController: NavHostController, mainVm: MainViewModel) {
     val context = LocalContext.current
     val imageUri = remember { mutableStateOf<Uri?>(null) }
     var tempImageUri: Uri? by remember { mutableStateOf(null) }
@@ -107,7 +107,15 @@ fun AddProjectScreen(navController: NavHostController, mainVm : MainViewModel) {
         Column(modifier = Modifier.padding(it)) {
             AddProjectScreenOptions(
                 onProjectSubmit = { projectName, projectDescription, requiredSkills, deadline, budget ->
-                    mainVm.addProject(projectName, projectDescription, requiredSkills, deadline, budget, imageUri.value)
+                    mainVm.addProject(
+                        projectName,
+                        projectDescription,
+                        requiredSkills,
+                        deadline,
+                        budget,
+                        imageUri.value,
+                        context
+                    )
                 },
                 openCamera = {
                     permissionLauncher.launch(android.Manifest.permission.CAMERA)
@@ -139,7 +147,11 @@ fun AddProjectScreenOptions(
             .fillMaxSize()
             .padding(16.dp)
     ) {
-        Text(text = "Add New Project", style = MaterialTheme.typography.h5, modifier = Modifier.padding(bottom = 16.dp))
+        Text(
+            text = "Add New Project",
+            style = MaterialTheme.typography.h5,
+            modifier = Modifier.padding(bottom = 16.dp)
+        )
 
         selectedImageUri?.let {
             Spacer(modifier = Modifier.height(8.dp))
@@ -222,6 +234,7 @@ fun AddProjectScreenOptions(
         }
     }
 }
+
 fun getImageUri(context: Context): Uri {
     val imageFile = File(context.filesDir, "project_image_${System.currentTimeMillis()}.jpg")
     return FileProvider.getUriForFile(
