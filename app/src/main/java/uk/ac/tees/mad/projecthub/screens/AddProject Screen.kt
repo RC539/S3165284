@@ -124,6 +124,7 @@ fun AddProjectScreen(navController: NavHostController, mainVm: MainViewModel) {
                     selectImageLauncher.launch("image/*")
                 },
                 selectedImageUri = imageUri.value,
+                context = context
             )
         }
     }
@@ -135,6 +136,7 @@ fun AddProjectScreenOptions(
     openCamera: () -> Unit,
     selectFile: () -> Unit,
     selectedImageUri: Uri?,
+    context: Context
 ) {
     var projectName by remember { mutableStateOf("") }
     var projectDescription by remember { mutableStateOf("") }
@@ -226,7 +228,17 @@ fun AddProjectScreenOptions(
 
         Button(
             onClick = {
-                onProjectSubmit(projectName, projectDescription, requiredSkills, deadline, budget)
+                if (selectedImageUri != null) {
+                    onProjectSubmit(
+                        projectName,
+                        projectDescription,
+                        requiredSkills,
+                        deadline,
+                        budget
+                    )
+                }else{
+                    Toast.makeText(context, "Please select an image", Toast.LENGTH_SHORT).show()
+                }
             },
             modifier = Modifier.fillMaxWidth()
         ) {
