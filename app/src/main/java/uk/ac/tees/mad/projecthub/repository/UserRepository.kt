@@ -1,7 +1,9 @@
 package uk.ac.tees.mad.projecthub.repository
 
+import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import uk.ac.tees.mad.projecthub.data.model.ProjectModel
 import javax.inject.Inject
 
 class UserRepository @Inject constructor(
@@ -47,4 +49,5 @@ class UserRepository @Inject constructor(
                 onResult(false, exception.message)
             }
     }
+
 }

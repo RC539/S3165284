@@ -30,7 +30,7 @@ fun ProjectHubNavigation() {
             SignupScreen(navController, authvm)
         }
         composable(NavigationDestination.HomeScreen.name){
-            HomeScreen(navController,)
+            HomeScreen(navController,mainvm)
         }
         composable(NavigationDestination.AddProjectScreen.name){
             AddProjectScreen(navController = navController, mainVm = mainvm)

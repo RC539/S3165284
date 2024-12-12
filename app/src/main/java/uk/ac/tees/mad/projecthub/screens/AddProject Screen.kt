@@ -7,6 +7,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -24,9 +25,11 @@ import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -47,6 +50,7 @@ import java.io.File
 @Composable
 fun AddProjectScreen(navController: NavHostController, mainVm: MainViewModel) {
     val context = LocalContext.current
+    val loading = mainVm.loading
     val imageUri = remember { mutableStateOf<Uri?>(null) }
     var tempImageUri: Uri? by remember { mutableStateOf(null) }
 
@@ -92,7 +96,9 @@ fun AddProjectScreen(navController: NavHostController, mainVm: MainViewModel) {
                         imageVector = Icons.Rounded.ArrowBack,
                         contentDescription = null,
                         tint = Color.White,
-                        modifier = Modifier.align(Alignment.CenterVertically)
+                        modifier = Modifier.align(Alignment.CenterVertically).clickable {
+                            navController.popBackStack()
+                        }
                     )
                     Spacer(modifier = Modifier.width(20.dp))
                     Text(
@@ -124,7 +130,8 @@ fun AddProjectScreen(navController: NavHostController, mainVm: MainViewModel) {
                     selectImageLauncher.launch("image/*")
                 },
                 selectedImageUri = imageUri.value,
-                context = context
+                context = context,
+                loading = loading
             )
         }
     }
@@ -136,7 +143,8 @@ fun AddProjectScreenOptions(
     openCamera: () -> Unit,
     selectFile: () -> Unit,
     selectedImageUri: Uri?,
-    context: Context
+    context: Context,
+    loading : MutableState<Boolean>
 ) {
     var projectName by remember { mutableStateOf("") }
     var projectDescription by remember { mutableStateOf("") }
@@ -242,7 +250,11 @@ fun AddProjectScreenOptions(
             },
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("Submit Project")
+            if (loading.value) {
+                    CircularProgressIndicator()
+            }else{
+                Text("Submit Project")
+            }
         }
     }
 }

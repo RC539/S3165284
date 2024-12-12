@@ -6,6 +6,7 @@ import android.util.Log
 import android.widget.Toast
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
+import kotlinx.coroutines.tasks.await
 import uk.ac.tees.mad.projecthub.data.model.ProjectModel
 import javax.inject.Inject
 import kotlin.coroutines.resume
@@ -59,5 +60,17 @@ class ProjectRepository @Inject constructor(
             .addOnFailureListener { exception ->
                 exception.printStackTrace()
             }
+    }
+
+    suspend fun fetchProjects(): List<ProjectModel>? {
+        return try {
+            val snapshot = firestore.collection("projects").get().await()
+            val projectList = snapshot.toObjects(ProjectModel::class.java)
+            Log.d("Response", projectList.toString())
+            projectList
+        } catch (e: Exception) {
+            Log.d("Error", e.message.toString())
+            null
+        }
     }
 }
