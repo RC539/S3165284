@@ -2,12 +2,17 @@ package uk.ac.tees.mad.projecthub.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import com.google.gson.Gson
+import uk.ac.tees.mad.projecthub.data.model.ProjectModel
 import uk.ac.tees.mad.projecthub.screens.AddProjectScreen
 import uk.ac.tees.mad.projecthub.screens.HomeScreen
 import uk.ac.tees.mad.projecthub.screens.LoginScreen
+import uk.ac.tees.mad.projecthub.screens.ProjectDetailsScreen
 import uk.ac.tees.mad.projecthub.screens.SignupScreen
 import uk.ac.tees.mad.projecthub.screens.SplashScreen
 import uk.ac.tees.mad.projecthub.viewmodels.AuthenticationViewModel
@@ -34,6 +39,14 @@ fun ProjectHubNavigation() {
         }
         composable(NavigationDestination.AddProjectScreen.name){
             AddProjectScreen(navController = navController, mainVm = mainvm)
+        }
+        composable(
+            route = "${NavigationDestination.ProjectDetailScreen.name}/{projectModel}",
+            arguments = listOf(navArgument("projectModel") { type = NavType.StringType })
+        ) { backStackEntry ->
+            val projectJson = backStackEntry.arguments?.getString("projectModel")
+            val projectModel = Gson().fromJson(projectJson, ProjectModel::class.java)
+            ProjectDetailsScreen(navController, projectModel)
         }
     }
 }
