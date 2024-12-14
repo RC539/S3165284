@@ -10,6 +10,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import uk.ac.tees.mad.projecthub.data.model.ProjectModel
+import uk.ac.tees.mad.projecthub.data.room.ProjectData
 import uk.ac.tees.mad.projecthub.repository.ProjectRepository
 import uk.ac.tees.mad.projecthub.repository.UserRepository
 import java.util.HashMap
@@ -23,6 +24,7 @@ class MainViewModel @Inject constructor(
 
     val loading = mutableStateOf(false)
     val projects = mutableStateOf<List<ProjectModel>?>(null)
+    val offlineProjects = mutableStateOf<List<ProjectData>?>(null)
     init {
         fetchProjects()
     }
@@ -31,7 +33,32 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             projects.value = projectRepository.fetchProjects()
             Log.d("Projects", "Projects: ${projects.value}")
+            val projectDataList = projects.value?.map { project ->
+                project.toProjectData()
+            }
+            projectDataList?.let {
+                projectRepository.insertIntoDatabase(it)
+                getAllFromDB()
+            }
         }
+    }
+
+    private fun getAllFromDB(){
+        viewModelScope.launch {
+            offlineProjects.value = projectRepository.getAllFromDatabase()
+            Log.d("Offline Projects", "Offline Projects: ${offlineProjects.value}")
+        }
+    }
+
+    fun ProjectModel.toProjectData():ProjectData{
+        return ProjectData(
+            projectName = this.projectName,
+            projectDescription = this.projectDescription,
+            requiredSkills = this.requiredSkills,
+            deadline = this.deadline,
+            budget = this.budget,
+            imageUrl = this.imageUrl
+        )
     }
 
     fun addProject(

@@ -1,4 +1,9 @@
-package uk.ac.tees.mad.projecthub.data.model
+package uk.ac.tees.mad.projecthub.data.room
 
-class Database {
+import androidx.room.Database
+import androidx.room.RoomDatabase
+
+@Database(entities = [ProjectData::class], version = 1, exportSchema = false)
+abstract class Database : RoomDatabase(){
+    abstract fun projectDao() : ProjectDao
 }

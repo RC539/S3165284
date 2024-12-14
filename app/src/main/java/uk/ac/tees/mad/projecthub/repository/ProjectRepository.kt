@@ -8,6 +8,8 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.tasks.await
 import uk.ac.tees.mad.projecthub.data.model.ProjectModel
+import uk.ac.tees.mad.projecthub.data.room.ProjectDao
+import uk.ac.tees.mad.projecthub.data.room.ProjectData
 import javax.inject.Inject
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
@@ -16,6 +18,7 @@ import kotlin.coroutines.suspendCoroutine
 class ProjectRepository @Inject constructor(
     private val firebaseStorage: FirebaseStorage,
     private val firestore: FirebaseFirestore,
+    private val projectDao: ProjectDao
 ) {
     suspend fun uploadProjectImage(imageUri: Uri): String {
         return suspendCoroutine { continuation ->
@@ -72,5 +75,14 @@ class ProjectRepository @Inject constructor(
             Log.d("Error", e.message.toString())
             null
         }
+    }
+
+    suspend fun insertIntoDatabase(project : List<ProjectData>){
+        projectDao.deleteAllProjects()
+        projectDao.insertProject(project)
+    }
+
+    suspend fun getAllFromDatabase() :List<ProjectData>{
+        return projectDao.getAllProjects()
     }
 }
