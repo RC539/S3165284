@@ -1,8 +1,12 @@
 package uk.ac.tees.mad.projecthub.viewmodels
 
+import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
+import uk.ac.tees.mad.projecthub.data.model.UserModel
 import uk.ac.tees.mad.projecthub.repository.UserRepository
 import javax.inject.Inject
 
@@ -14,8 +18,11 @@ class AuthenticationViewModel @Inject constructor(
     val loading = mutableStateOf(false)
     val isUserSignedIn = mutableStateOf(false)
 
+    val userData = mutableStateOf<UserModel?> (null)
+
     init {
         isUserSignedIn.value = userRepository.isUserSignedIn()
+        fetchUserData()
     }
 
     fun signUp(name: String, email: String, password: String, onResult: (Boolean, String?) -> Unit) {
@@ -46,6 +53,17 @@ class AuthenticationViewModel @Inject constructor(
                 isUserSignedIn.value = true
             } else {
                 onResult(false, errorMessage)
+            }
+        }
+    }
+
+    fun fetchUserData() {
+        val uid = userRepository.returnUid()
+        if (uid != null) {
+            viewModelScope.launch {
+                val response = userRepository.fetchUserData(uid)
+                userData.value = response
+                Log.d("UserData", "User data fetched: $userData")
             }
         }
     }

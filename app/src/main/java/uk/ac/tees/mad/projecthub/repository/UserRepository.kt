@@ -3,7 +3,9 @@ package uk.ac.tees.mad.projecthub.repository
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.tasks.await
 import uk.ac.tees.mad.projecthub.data.model.ProjectModel
+import uk.ac.tees.mad.projecthub.data.model.UserModel
 import javax.inject.Inject
 
 class UserRepository @Inject constructor(
@@ -12,6 +14,10 @@ class UserRepository @Inject constructor(
 ) {
     fun isUserSignedIn(): Boolean {
         return auth.currentUser != null
+    }
+
+    fun returnUid(): String? {
+        return auth.currentUser?.uid
     }
 
     fun createUserOnFirestore(uid: String?, name: String, email: String, password: String, onResult: (Boolean) -> Unit) {
@@ -50,4 +56,13 @@ class UserRepository @Inject constructor(
             }
     }
 
+    suspend fun fetchUserData(uid: String): UserModel? {
+        return try {
+            val snapshot = firestore.collection("user").document(uid).get().await()
+            snapshot.toObject(UserModel::class.java)
+        } catch (e: Exception) {
+            Log.e("FirestoreError", "Error fetching user data", e)
+            null
+        }
+    }
 }
