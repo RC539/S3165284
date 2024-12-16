@@ -55,6 +55,9 @@ android {
 
 dependencies {
 
+    //image compression
+    implementation ("id.zelory:compressor:3.0.1")
+
     implementation ("androidx.compose.material:material:1.7.0")
     implementation ("androidx.compose.material:material-icons-extended:1.7.0")
     implementation("androidx.compose.material3:material3:1.3.0")

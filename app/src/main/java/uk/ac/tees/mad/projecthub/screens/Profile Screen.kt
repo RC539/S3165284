@@ -61,6 +61,7 @@ fun ProfileScreen(userVm: AuthenticationViewModel) {
     val context = LocalContext.current
     val imageUri = remember { mutableStateOf<Uri?>(null) }
     var tempImageUri: Uri? by remember { mutableStateOf(null) }
+    val Loading = userVm.loading.value
 
     val takePictureLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.TakePicture()
@@ -69,6 +70,7 @@ fun ProfileScreen(userVm: AuthenticationViewModel) {
             Toast.makeText(context, "Picture taken successfully!", Toast.LENGTH_SHORT).show()
             imageUri.value = tempImageUri
             Log.d("ProfileScreen", "Image URI: ${imageUri.value}")
+            imageUri.value?.let { userVm.updateProfilePicture(it, context) }
         } else {
             Toast.makeText(context, "Picture taking failed!", Toast.LENGTH_SHORT).show()
         }
@@ -163,8 +165,19 @@ fun ProfileScreen(userVm: AuthenticationViewModel) {
                         }
                         Spacer(modifier = Modifier.height(10.dp))
                         Row{
-                        Button(onClick = { /*TODO*/ }, colors = ButtonDefaults.buttonColors(Color.Blue), shape = RoundedCornerShape(20.dp),modifier = Modifier.padding(30.dp)) {
-                            Text(text = "Save", fontFamily = poppins, color = Color.White, fontWeight = FontWeight.SemiBold)
+                        Button(onClick = {
+                            userVm.updateUserData(name.value, email.value)
+                        }, colors = ButtonDefaults.buttonColors(Color.Blue), shape = RoundedCornerShape(20.dp),modifier = Modifier.padding(30.dp)) {
+                            if (Loading) {
+                                CircularProgressIndicator()
+                            } else {
+                                Text(
+                                    text = "Save",
+                                    fontFamily = poppins,
+                                    color = Color.White,
+                                    fontWeight = FontWeight.SemiBold
+                                )
+                            }
                         }
                         Spacer(modifier = Modifier.weight(1f))
                         Button(onClick = { /*TODO*/ }, colors = ButtonDefaults.buttonColors(Color.Red), shape = RoundedCornerShape(20.dp),modifier = Modifier.padding(30.dp)) {

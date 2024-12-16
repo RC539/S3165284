@@ -1,8 +1,10 @@
 package uk.ac.tees.mad.projecthub.repository
 
+import android.net.Uri
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.tasks.await
 import uk.ac.tees.mad.projecthub.data.model.ProjectModel
 import uk.ac.tees.mad.projecthub.data.model.UserModel
@@ -10,7 +12,8 @@ import javax.inject.Inject
 
 class UserRepository @Inject constructor(
     private val firestore: FirebaseFirestore,
-    private val auth: FirebaseAuth
+    private val auth: FirebaseAuth,
+    private val storage : FirebaseStorage
 ) {
     fun isUserSignedIn(): Boolean {
         return auth.currentUser != null
@@ -63,6 +66,42 @@ class UserRepository @Inject constructor(
         } catch (e: Exception) {
             Log.e("FirestoreError", "Error fetching user data", e)
             null
+        }
+    }
+
+    suspend fun addProfilePhoto(image: Uri) {
+        try {
+            val uploadTask = storage.reference
+                .child("profile_photos/${auth.currentUser?.uid}")
+                .putFile(image)
+                .await()
+
+            val downloadUrl = storage.reference
+                .child("profile_photos/${auth.currentUser?.uid}")
+                .downloadUrl
+                .await()
+
+            firestore.collection("user")
+                .document(auth.currentUser?.uid!!)
+                .update("userProfile", downloadUrl.toString())
+                .await()
+
+            fetchUserData(auth.currentUser?.uid!!)
+        } catch (e: Exception) {
+            Log.d("Profile Picture", "Failed: ${e.message}")
+            throw e
+        }
+    }
+
+    fun editUserProfile(name: String, email: String) {
+        try {
+            firestore.collection("user").document(auth.currentUser?.uid!!).update(
+                "name", name,
+                "email", email
+            )
+        } catch (e: Exception) {
+            Log.d("User Data", "Failed: ${e.message}")
+            throw e
         }
     }
 }
