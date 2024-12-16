@@ -69,6 +69,9 @@ fun HomeScreen(navController: NavHostController, mainVm: MainViewModel) {
                     modifier = Modifier
                         .align(Alignment.CenterVertically)
                         .padding(4.dp)
+                        .clickable {
+                            navController.navigate(NavigationDestination.ProfileScreen.name)
+                        }
                 )
             }
         }, modifier = Modifier.height(80.dp))
