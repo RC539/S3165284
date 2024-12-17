@@ -14,16 +14,21 @@ import androidx.compose.ui.platform.LocalContext
 
 
 private val DarkColorScheme = darkColorScheme(
-    primary = Color.Blue,
-    secondary = Color.White,
-    tertiary = Pink80
+    primary = Color(0xFF1E88E5),
+    secondary = Color(0xFFB0BEC5),
+    background = Color(0xFF121212),
+    onPrimary = Color.White,
+    onSecondary = Color.Black,
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = Color.Blue,
-    secondary = Color.Black,
-    tertiary = Pink40
+    primary = Color(0xFF1976D2),
+    secondary = Color(0xFF757575),
+    background = Color.White,
+    onPrimary = Color.White,
+    onSecondary = Color.Black,
 )
+
 
 @Composable
 fun ProjectHubTheme(
@@ -31,12 +36,19 @@ fun ProjectHubTheme(
     dynamicColor: Boolean = true,
     content: @Composable () -> Unit
 ) {
-    val colorScheme = if (darkTheme) {
-        DarkColorScheme
-    } else {
-        LightColorScheme
+    val context = LocalContext.current
+    val colorScheme = when {
+        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
+            val dynamicColors = if (darkTheme) {
+                dynamicDarkColorScheme(context)
+            } else {
+                dynamicLightColorScheme(context)
+            }
+            dynamicColors
+        }
+        darkTheme -> DarkColorScheme
+        else -> LightColorScheme
     }
-
 
     MaterialTheme(
         colorScheme = colorScheme,

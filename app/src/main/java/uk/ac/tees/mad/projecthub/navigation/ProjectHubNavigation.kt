@@ -1,5 +1,6 @@
 package uk.ac.tees.mad.projecthub.navigation
 
+import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavType
@@ -22,35 +23,40 @@ import uk.ac.tees.mad.projecthub.viewmodels.MainViewModel
 @Composable
 fun ProjectHubNavigation() {
     val navController = rememberNavController()
-    val authvm : AuthenticationViewModel = hiltViewModel()
-    val mainvm : MainViewModel = hiltViewModel()
+    val authvm: AuthenticationViewModel = hiltViewModel()
+    val mainvm: MainViewModel = hiltViewModel()
 
-    NavHost(navController = navController,startDestination = NavigationDestination.SplashScreen.name){
-        composable(NavigationDestination.SplashScreen.name){
-            SplashScreen(navController, authvm)
-        }
-        composable(NavigationDestination.LoginScreen.name){
-            LoginScreen(navController, authvm)
-        }
-        composable(NavigationDestination.SignupScreen.name){
-            SignupScreen(navController, authvm)
-        }
-        composable(NavigationDestination.HomeScreen.name){
-            HomeScreen(navController,mainvm)
-        }
-        composable(NavigationDestination.AddProjectScreen.name){
-            AddProjectScreen(navController = navController, mainVm = mainvm)
-        }
-        composable(
-            route = "${NavigationDestination.ProjectDetailScreen.name}/{projectModel}",
-            arguments = listOf(navArgument("projectModel") { type = NavType.StringType })
-        ) { backStackEntry ->
-            val projectJson = backStackEntry.arguments?.getString("projectModel")
-            val projectModel = Gson().fromJson(projectJson, ProjectModel::class.java)
-            ProjectDetailsScreen(navController, projectModel)
-        }
-        composable(NavigationDestination.ProfileScreen.name){
-            ProfileScreen(userVm = authvm)
+    Surface {
+        NavHost(
+            navController = navController,
+            startDestination = NavigationDestination.SplashScreen.name
+        ) {
+            composable(NavigationDestination.SplashScreen.name) {
+                SplashScreen(navController, authvm)
+            }
+            composable(NavigationDestination.LoginScreen.name) {
+                LoginScreen(navController, authvm)
+            }
+            composable(NavigationDestination.SignupScreen.name) {
+                SignupScreen(navController, authvm)
+            }
+            composable(NavigationDestination.HomeScreen.name) {
+                HomeScreen(navController, mainvm)
+            }
+            composable(NavigationDestination.AddProjectScreen.name) {
+                AddProjectScreen(navController = navController, mainVm = mainvm)
+            }
+            composable(
+                route = "${NavigationDestination.ProjectDetailScreen.name}/{projectModel}",
+                arguments = listOf(navArgument("projectModel") { type = NavType.StringType })
+            ) { backStackEntry ->
+                val projectJson = backStackEntry.arguments?.getString("projectModel")
+                val projectModel = Gson().fromJson(projectJson, ProjectModel::class.java)
+                ProjectDetailsScreen(navController, projectModel)
+            }
+            composable(NavigationDestination.ProfileScreen.name) {
+                ProfileScreen(userVm = authvm)
+            }
         }
     }
 }
