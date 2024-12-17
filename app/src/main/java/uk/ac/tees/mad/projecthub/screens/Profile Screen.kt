@@ -27,6 +27,7 @@ import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -51,8 +52,7 @@ import uk.ac.tees.mad.projecthub.ui.theme.poppins
 import uk.ac.tees.mad.projecthub.viewmodels.AuthenticationViewModel
 
 @Composable
-fun ProfileScreen(userVm: AuthenticationViewModel) {
-    val gradientColor = listOf(Color.Blue, Color.White)
+fun ProfileScreen(userVm: AuthenticationViewModel,onToggle:()->Unit) {
     val userData = userVm.userData
     val isLoading = remember { mutableStateOf(true) }
     val retryCount = remember { mutableStateOf(0) }
@@ -61,7 +61,8 @@ fun ProfileScreen(userVm: AuthenticationViewModel) {
     val context = LocalContext.current
     val imageUri = remember { mutableStateOf<Uri?>(null) }
     var tempImageUri: Uri? by remember { mutableStateOf(null) }
-    val Loading = userVm.loading.value
+    val loading = userVm.loading.value
+    val colorScheme = androidx.compose.material3.MaterialTheme.colorScheme
 
     val takePictureLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.TakePicture()
@@ -89,108 +90,157 @@ fun ProfileScreen(userVm: AuthenticationViewModel) {
         }
     }
 
-
     LaunchedEffect(key1 = retryCount.value) {
         userVm.fetchUserData()
 
         if (userData.value != null) {
-            isLoading.value = false 
+            isLoading.value = false
         } else {
             delay(5000L)
 
             if (userData.value == null && retryCount.value < 1) {
-                retryCount.value += 1 
+                retryCount.value += 1
             } else {
-                isLoading.value = false 
+                isLoading.value = false
             }
         }
     }
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(brush = Brush.verticalGradient(gradientColor))
+    Surface(
+        modifier = Modifier.fillMaxSize(),
+        color = colorScheme.background
     ) {
-        Column(
+        Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = 20.dp, vertical = 70.dp)
-                .shadow(
-                    elevation = 10.dp,
-                    shape = RoundedCornerShape(30.dp)
-                )
-                .clip(RoundedCornerShape(30.dp))
-                .background(Color.White)
+                .background(brush = Brush.verticalGradient(listOf(colorScheme.primary, colorScheme.secondary)))
         ) {
-            if (isLoading.value) {
-                CircularProgressIndicator(
-                    modifier = Modifier.align(Alignment.CenterHorizontally)
-                )
-            } else {
-                userData.value?.let { user ->
-                    Column(
-                        modifier = Modifier.fillMaxSize(),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Spacer(modifier = Modifier.height(80.dp))
-                        if (userData.value!!.userProfile.isNotEmpty()){
-                            AsyncImage(
-                                model = userData.value!!.userProfile,
-                                contentDescription = null,
-                                modifier = Modifier
-                                    .size(200.dp)
-                                    .clip(CircleShape)
-                                    .border(2.dp, Color.Black, CircleShape)
-                                    .clickable {
-                                        permissionLauncher.launch(android.Manifest.permission.CAMERA)
-                                    },
-                                contentScale = ContentScale.FillBounds)
-                        }else{
-                            Image(painter = painterResource(id = R.drawable.man), contentDescription = null,
-                                modifier = Modifier
-                                    .size(200.dp)
-                                    .clip(CircleShape)
-                                    .border(2.dp, Color.Black, CircleShape)
-                                    .clickable {
-                                        permissionLauncher.launch(android.Manifest.permission.CAMERA)
-                                    })
-                        }
-                        Spacer(modifier = Modifier.height(40.dp))
-                        OutlinedTextField(value = name.value, onValueChange = {name.value = it})
-                        Spacer(modifier = Modifier.height(20.dp))
-                        OutlinedTextField(value = email.value, onValueChange = {email.value = it})
-                        Spacer(modifier = Modifier.height(20.dp))
-                        Button(onClick = { /*TODO*/ }) {
-                            Text(text = "Toggle Dark/Light Mode", fontFamily = poppins, color = Color.White, fontWeight = FontWeight.SemiBold)
-                        }
-                        Spacer(modifier = Modifier.height(10.dp))
-                        Row{
-                        Button(onClick = {
-                            userVm.updateUserData(name.value, email.value)
-                        }, colors = ButtonDefaults.buttonColors(Color.Blue), shape = RoundedCornerShape(20.dp),modifier = Modifier.padding(30.dp)) {
-                            if (Loading) {
-                                CircularProgressIndicator()
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 20.dp, vertical = 70.dp)
+                    .shadow(
+                        elevation = 10.dp,
+                        shape = RoundedCornerShape(30.dp)
+                    )
+                    .clip(RoundedCornerShape(30.dp))
+                    .background(colorScheme.surface)
+            ) {
+                if (isLoading.value) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.align(Alignment.CenterHorizontally),
+                        color = colorScheme.primary
+                    )
+                } else {
+                    userData.value?.let { user ->
+                        Column(
+                            modifier = Modifier.fillMaxSize(),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Spacer(modifier = Modifier.height(80.dp))
+                            if (userData.value!!.userProfile.isNotEmpty()) {
+                                AsyncImage(
+                                    model = userData.value!!.userProfile,
+                                    contentDescription = null,
+                                    modifier = Modifier
+                                        .size(200.dp)
+                                        .clip(CircleShape)
+                                        .border(2.dp, colorScheme.onSurface, CircleShape)
+                                        .clickable {
+                                            permissionLauncher.launch(Manifest.permission.CAMERA)
+                                        },
+                                    contentScale = ContentScale.FillBounds
+                                )
                             } else {
+                                Image(
+                                    painter = painterResource(id = R.drawable.man),
+                                    contentDescription = null,
+                                    modifier = Modifier
+                                        .size(200.dp)
+                                        .clip(CircleShape)
+                                        .border(2.dp, colorScheme.onSurface, CircleShape)
+                                        .clickable {
+                                            permissionLauncher.launch(Manifest.permission.CAMERA)
+                                        })
+                            }
+                            Spacer(modifier = Modifier.height(40.dp))
+                            OutlinedTextField(
+                                value = name.value,
+                                onValueChange = { name.value = it },
+                                label = { Text("Name") },
+                                colors = androidx.compose.material.TextFieldDefaults.outlinedTextFieldColors(
+                                    textColor = colorScheme.onSurface,
+                                    focusedBorderColor = colorScheme.primary,
+                                    unfocusedBorderColor = colorScheme.onSurface.copy(alpha = 0.5f)
+                                ),
+                                modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp)
+                            )
+                            Spacer(modifier = Modifier.height(20.dp))
+                            OutlinedTextField(
+                                value = email.value,
+                                onValueChange = { email.value = it },
+                                label = { Text("Email") },
+                                colors = androidx.compose.material.TextFieldDefaults.outlinedTextFieldColors(
+                                    textColor = colorScheme.onSurface,
+                                    focusedBorderColor = colorScheme.primary,
+                                    unfocusedBorderColor = colorScheme.onSurface.copy(alpha = 0.5f)
+                                ),
+                                modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp)
+                            )
+                            Spacer(modifier = Modifier.height(20.dp))
+                            Button(onClick = { onToggle() }) {
                                 Text(
-                                    text = "Save",
+                                    text = "Toggle Dark/Light Mode",
                                     fontFamily = poppins,
-                                    color = Color.White,
+                                    color = colorScheme.onPrimary,
                                     fontWeight = FontWeight.SemiBold
                                 )
                             }
-                        }
-                        Spacer(modifier = Modifier.weight(1f))
-                        Button(onClick = { /*TODO*/ }, colors = ButtonDefaults.buttonColors(Color.Red), shape = RoundedCornerShape(20.dp),modifier = Modifier.padding(30.dp)) {
-                            Text(text = "Log Out", fontFamily = poppins, color = Color.White, fontWeight = FontWeight.SemiBold)
-                        }
+                            Spacer(modifier = Modifier.height(10.dp))
+                            Row {
+                                Button(
+                                    onClick = {
+                                        userVm.updateUserData(name.value, email.value)
+                                    },
+                                    colors = ButtonDefaults.buttonColors(colorScheme.primary),
+                                    shape = RoundedCornerShape(20.dp),
+                                    modifier = Modifier.padding(30.dp)
+                                ) {
+                                    if (loading) {
+                                        CircularProgressIndicator(color = colorScheme.onPrimary)
+                                    } else {
+                                        Text(
+                                            text = "Save",
+                                            fontFamily = poppins,
+                                            color = colorScheme.onPrimary,
+                                            fontWeight = FontWeight.SemiBold
+                                        )
+                                    }
+                                }
+                                Spacer(modifier = Modifier.weight(1f))
+                                Button(
+                                    onClick = { /*TODO*/ },
+                                    colors = ButtonDefaults.buttonColors(colorScheme.error),
+                                    shape = RoundedCornerShape(20.dp),
+                                    modifier = Modifier.padding(30.dp)
+                                ) {
+                                    Text(
+                                        text = "Log Out",
+                                        fontFamily = poppins,
+                                        color = colorScheme.onError,
+                                        fontWeight = FontWeight.SemiBold
+                                    )
+                                }
                             }
+                        }
+                    } ?: run {
+                        Text(
+                            text = "No data",
+                            modifier = Modifier.align(Alignment.CenterHorizontally),
+                            style = MaterialTheme.typography.h6,
+                            color = colorScheme.onSurface
+                        )
                     }
-                } ?: run {
-                    Text(
-                        text = "No data",
-                        modifier = Modifier.align(Alignment.CenterHorizontally),
-                        style = MaterialTheme.typography.h6
-                    )
                 }
             }
         }

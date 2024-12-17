@@ -6,34 +6,15 @@ import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
+import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Icon
-import androidx.compose.material3.Scaffold
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -47,6 +28,7 @@ import uk.ac.tees.mad.projecthub.ui.theme.poppins
 import uk.ac.tees.mad.projecthub.viewmodels.MainViewModel
 import java.io.File
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddProjectScreen(navController: NavHostController, mainVm: MainViewModel) {
     val context = LocalContext.current
@@ -72,43 +54,42 @@ fun AddProjectScreen(navController: NavHostController, mainVm: MainViewModel) {
             Toast.makeText(context, "Camera permission granted", Toast.LENGTH_SHORT).show()
             tempImageUri = getImageUri(context)
             takePictureLauncher.launch(tempImageUri!!)
-
         } else {
             Toast.makeText(context, "Camera permission denied", Toast.LENGTH_SHORT).show()
         }
     }
+
     val selectImageLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
     ) { uri: Uri? ->
         imageUri.value = uri
     }
 
-
     Scaffold(
         topBar = {
-            TopAppBar(title = {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .statusBarsPadding()
-                ) {
-                    Icon(
-                        imageVector = Icons.Rounded.ArrowBack,
-                        contentDescription = null,
-                        tint = Color.White,
-                        modifier = Modifier.align(Alignment.CenterVertically).clickable {
-                            navController.popBackStack()
-                        }
-                    )
-                    Spacer(modifier = Modifier.width(20.dp))
+            TopAppBar(
+                title = {
                     Text(
                         text = "Add Project",
                         fontFamily = poppins,
-                        modifier = Modifier.align(Alignment.CenterVertically)
+                        color = MaterialTheme.colorScheme.onPrimary
                     )
-                }
-            }, modifier = Modifier.height(80.dp))
-        }
+                },
+                navigationIcon = {
+                    IconButton(onClick = { navController.popBackStack() }) {
+                        Icon(
+                            imageVector = Icons.Rounded.ArrowBack,
+                            contentDescription = "Back",
+                            tint = MaterialTheme.colorScheme.onPrimary
+                        )
+                    }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                )
+            )
+        },
+        modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)
     ) {
         Column(modifier = Modifier.padding(it)) {
             AddProjectScreenOptions(
@@ -144,7 +125,7 @@ fun AddProjectScreenOptions(
     selectFile: () -> Unit,
     selectedImageUri: Uri?,
     context: Context,
-    loading : MutableState<Boolean>
+    loading: MutableState<Boolean>
 ) {
     var projectName by remember { mutableStateOf("") }
     var projectDescription by remember { mutableStateOf("") }
@@ -159,7 +140,7 @@ fun AddProjectScreenOptions(
     ) {
         Text(
             text = "Add New Project",
-            style = MaterialTheme.typography.h5,
+            style = MaterialTheme.typography.headlineMedium,
             modifier = Modifier.padding(bottom = 16.dp)
         )
 
@@ -175,6 +156,7 @@ fun AddProjectScreenOptions(
                     .border(1.dp, Color.Gray)
             )
         }
+
         OutlinedTextField(
             value = projectName,
             onValueChange = { projectName = it },
@@ -232,6 +214,7 @@ fun AddProjectScreenOptions(
                 Text("Choose Project Image")
             }
         }
+
         Spacer(modifier = Modifier.height(16.dp))
 
         Button(
@@ -244,15 +227,15 @@ fun AddProjectScreenOptions(
                         deadline,
                         budget
                     )
-                }else{
+                } else {
                     Toast.makeText(context, "Please select an image", Toast.LENGTH_SHORT).show()
                 }
             },
             modifier = Modifier.fillMaxWidth()
         ) {
             if (loading.value) {
-                    CircularProgressIndicator()
-            }else{
+                CircularProgressIndicator()
+            } else {
                 Text("Submit Project")
             }
         }

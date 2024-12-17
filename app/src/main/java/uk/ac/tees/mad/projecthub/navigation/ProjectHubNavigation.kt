@@ -1,7 +1,10 @@
 package uk.ac.tees.mad.projecthub.navigation
 
-import androidx.compose.material.Surface
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.Surface
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -21,12 +24,15 @@ import uk.ac.tees.mad.projecthub.viewmodels.AuthenticationViewModel
 import uk.ac.tees.mad.projecthub.viewmodels.MainViewModel
 
 @Composable
-fun ProjectHubNavigation() {
+fun ProjectHubNavigation(onToggle:()-> Unit) {
     val navController = rememberNavController()
     val authvm: AuthenticationViewModel = hiltViewModel()
     val mainvm: MainViewModel = hiltViewModel()
 
-    Surface {
+    Surface(
+        modifier = Modifier.fillMaxSize(),
+        color = MaterialTheme.colorScheme.background
+    ){
         NavHost(
             navController = navController,
             startDestination = NavigationDestination.SplashScreen.name
@@ -55,7 +61,7 @@ fun ProjectHubNavigation() {
                 ProjectDetailsScreen(navController, projectModel)
             }
             composable(NavigationDestination.ProfileScreen.name) {
-                ProfileScreen(userVm = authvm)
+                ProfileScreen(userVm = authvm, onToggle = {onToggle()})
             }
         }
     }
