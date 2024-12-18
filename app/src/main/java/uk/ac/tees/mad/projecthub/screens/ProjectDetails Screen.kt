@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -46,7 +47,7 @@ fun ProjectDetailsScreen(navController: NavHostController, project: ProjectModel
                 .clip(
                     RoundedCornerShape(30.dp)
                 )
-                .background(Color.White)
+                .background(MaterialTheme.colorScheme.surface)
         ) {
             AsyncImage(
                 model = project.imageUrl, contentDescription = "Project Image",

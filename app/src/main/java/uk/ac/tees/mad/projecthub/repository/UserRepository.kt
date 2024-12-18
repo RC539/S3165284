@@ -104,4 +104,8 @@ class UserRepository @Inject constructor(
             throw e
         }
     }
+
+    fun logout() {
+        auth.signOut()
+    }
 }

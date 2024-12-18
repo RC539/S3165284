@@ -61,7 +61,7 @@ fun ProjectHubNavigation(onToggle:()-> Unit) {
                 ProjectDetailsScreen(navController, projectModel)
             }
             composable(NavigationDestination.ProfileScreen.name) {
-                ProfileScreen(userVm = authvm, onToggle = {onToggle()})
+                ProfileScreen(userVm = authvm, onToggle = {onToggle()}, navController)
             }
         }
     }

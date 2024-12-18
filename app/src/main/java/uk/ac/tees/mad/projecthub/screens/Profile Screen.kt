@@ -48,11 +48,12 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import kotlinx.coroutines.delay
 import uk.ac.tees.mad.projecthub.R
+import uk.ac.tees.mad.projecthub.navigation.NavigationDestination
 import uk.ac.tees.mad.projecthub.ui.theme.poppins
 import uk.ac.tees.mad.projecthub.viewmodels.AuthenticationViewModel
 
 @Composable
-fun ProfileScreen(userVm: AuthenticationViewModel,onToggle:()->Unit) {
+fun ProfileScreen(userVm: AuthenticationViewModel , onToggle:()->Unit , navController: androidx.navigation.NavHostController) {
     val userData = userVm.userData
     val isLoading = remember { mutableStateOf(true) }
     val retryCount = remember { mutableStateOf(0) }
@@ -219,7 +220,12 @@ fun ProfileScreen(userVm: AuthenticationViewModel,onToggle:()->Unit) {
                                 }
                                 Spacer(modifier = Modifier.weight(1f))
                                 Button(
-                                    onClick = { /*TODO*/ },
+                                    onClick = {
+                                        userVm.logout()
+                                        navController.navigate(NavigationDestination.LoginScreen.name){
+                                            popUpTo(0)
+                                        }
+                                    },
                                     colors = ButtonDefaults.buttonColors(colorScheme.error),
                                     shape = RoundedCornerShape(20.dp),
                                     modifier = Modifier.padding(30.dp)

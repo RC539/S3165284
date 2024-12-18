@@ -134,4 +134,9 @@ class AuthenticationViewModel @Inject constructor(
             loading.value = false
         }
     }
+
+    fun logout() {
+        userRepository.logout()
+        isUserSignedIn.value = false
+    }
 }

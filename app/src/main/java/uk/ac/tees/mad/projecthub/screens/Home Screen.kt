@@ -59,6 +59,8 @@ fun HomeScreen(navController: NavHostController, mainVm: MainViewModel) {
                         Text(
                             text = "ProjectHub",
                             fontFamily = poppins,
+                            fontWeight = FontWeight.SemiBold,
+                            fontSize = 30.sp,
                             color = MaterialTheme.colorScheme.onBackground,
                             modifier = Modifier.align(Alignment.CenterVertically)
                         )
@@ -68,7 +70,8 @@ fun HomeScreen(navController: NavHostController, mainVm: MainViewModel) {
                             contentDescription = null,
                             modifier = Modifier
                                 .align(Alignment.CenterVertically)
-                                .padding(4.dp)
+                                .padding(8.dp)
+                                .size(32.dp)
                                 .clickable {
                                     navController.navigate(NavigationDestination.ProfileScreen.name)
                                 },
