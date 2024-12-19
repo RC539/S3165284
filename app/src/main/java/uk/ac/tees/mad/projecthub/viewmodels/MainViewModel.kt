@@ -33,16 +33,17 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             projects.value = projectRepository.fetchProjects()
             Log.d("Projects", "Projects: ${projects.value}")
-            val projectDataList = projects.value?.map { project ->
-                project.toProjectData()
-            }
-            projectDataList?.let {
-                projectRepository.insertIntoDatabase(it)
-                getAllFromDB()
-            }
         }
     }
 
+    fun putIntoDatabase(project : ProjectModel){
+        viewModelScope.launch {
+            val response = project.toProjectData()
+            projectRepository.insertIntoDatabase(response)
+            getAllFromDB()
+        }
+    }
+    
     private fun getAllFromDB(){
         viewModelScope.launch {
             offlineProjects.value = projectRepository.getAllFromDatabase()

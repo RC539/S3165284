@@ -77,8 +77,7 @@ class ProjectRepository @Inject constructor(
         }
     }
 
-    suspend fun insertIntoDatabase(project : List<ProjectData>){
-        projectDao.deleteAllProjects()
+    suspend fun insertIntoDatabase(project : ProjectData){
         projectDao.insertProject(project)
     }
 

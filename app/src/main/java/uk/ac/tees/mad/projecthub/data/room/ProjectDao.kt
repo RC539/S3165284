@@ -8,7 +8,7 @@ import androidx.room.Query
 interface ProjectDao {
 
     @Insert
-    suspend fun insertProject(project : List<ProjectData>)
+    suspend fun insertProject(project: uk.ac.tees.mad.projecthub.data.room.ProjectData)
 
     @Query("SELECT * FROM projects")
     suspend fun getAllProjects(): List<ProjectData>
