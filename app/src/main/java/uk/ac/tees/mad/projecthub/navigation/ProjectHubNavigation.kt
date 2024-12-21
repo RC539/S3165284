@@ -58,7 +58,7 @@ fun ProjectHubNavigation(onToggle:()-> Unit) {
             ) { backStackEntry ->
                 val projectJson = backStackEntry.arguments?.getString("projectModel")
                 val projectModel = Gson().fromJson(projectJson, ProjectModel::class.java)
-                ProjectDetailsScreen(navController, projectModel)
+                ProjectDetailsScreen(navController, projectModel, mainvm)
             }
             composable(NavigationDestination.ProfileScreen.name) {
                 ProfileScreen(userVm = authvm, onToggle = {onToggle()}, navController)

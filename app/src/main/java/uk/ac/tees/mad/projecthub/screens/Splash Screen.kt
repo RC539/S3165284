@@ -1,5 +1,8 @@
 package uk.ac.tees.mad.projecthub.screens
 
+import androidx.compose.animation.core.EaseInBounce
+import androidx.compose.animation.core.EaseInOutBounce
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -40,41 +43,26 @@ fun SplashScreen(navController: NavController, authvm: AuthenticationViewModel) 
     LaunchedEffect(Unit) {
         scale.animateTo(
             targetValue = 1f,
-            animationSpec = androidx.compose.animation.core.tween(
-                durationMillis = 500,
-                easing = androidx.compose.animation.core.EaseInBounce
-            )
+            animationSpec = tween(durationMillis = 500, easing = EaseInBounce)
         )
         alpha.animateTo(
             targetValue = 1f,
-            animationSpec = androidx.compose.animation.core.tween(
-                durationMillis = 500,
-                easing = androidx.compose.animation.core.EaseInOutBounce
-            )
+            animationSpec = tween(durationMillis = 500, easing = EaseInOutBounce)
         )
-        delay(1500L)
-        scale.animateTo(
-            targetValue = 0f,
-            animationSpec = androidx.compose.animation.core.tween(
-                durationMillis = 500,
-                easing = androidx.compose.animation.core.EaseInBounce
-            )
-        )
-        alpha.animateTo(
-            targetValue = 0f,
-            animationSpec = androidx.compose.animation.core.tween(
-                durationMillis = 500,
-                easing = androidx.compose.animation.core.EaseInOutBounce
-            )
-        )
+
+        delay(2000L)
+
         if (isSigned.value) {
-            navController.navigate(NavigationDestination.HomeScreen.name){
+            navController.navigate(NavigationDestination.HomeScreen.name) {
                 popUpTo(0)
             }
-        }else {
-            navController.navigate(NavigationDestination.LoginScreen.name)
+        } else {
+            navController.navigate(NavigationDestination.LoginScreen.name) {
+                popUpTo(0)
+            }
         }
     }
+
     Column(modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally) {

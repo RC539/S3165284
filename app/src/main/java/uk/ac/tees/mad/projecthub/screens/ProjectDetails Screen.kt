@@ -27,9 +27,10 @@ import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import uk.ac.tees.mad.projecthub.data.model.ProjectModel
 import uk.ac.tees.mad.projecthub.ui.theme.poppins
+import uk.ac.tees.mad.projecthub.viewmodels.MainViewModel
 
 @Composable
-fun ProjectDetailsScreen(navController: NavHostController, project: ProjectModel) {
+fun ProjectDetailsScreen(navController: NavHostController, project: ProjectModel, mainvm : MainViewModel) {
     val gradientColor = listOf(Color.Blue, Color.White)
     Box(
         modifier = Modifier
@@ -89,7 +90,7 @@ fun ProjectDetailsScreen(navController: NavHostController, project: ProjectModel
                 )
                 Spacer(modifier = Modifier.weight(1f))
                 Button(
-                    onClick = { /*TODO*/ },
+                    onClick = { mainvm.putIntoDatabase(project) },
                     modifier = Modifier.fillMaxWidth(),
                     colors = ButtonDefaults.buttonColors(Color.Blue),
                     shape = RoundedCornerShape(20.dp)

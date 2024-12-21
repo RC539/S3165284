@@ -27,11 +27,13 @@ import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material.icons.rounded.Email
 import androidx.compose.material.icons.rounded.Lock
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -51,6 +53,7 @@ import uk.ac.tees.mad.projecthub.R
 import uk.ac.tees.mad.projecthub.navigation.NavigationDestination
 import uk.ac.tees.mad.projecthub.ui.theme.poppins
 import uk.ac.tees.mad.projecthub.viewmodels.AuthenticationViewModel
+import uk.ac.tees.mad.projecthub.viewmodels.MainViewModel
 
 
 @Composable
@@ -61,9 +64,11 @@ fun LoginScreen(navController: NavController, authvm: AuthenticationViewModel) {
     val email = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
     val passwordVisible = remember { mutableStateOf(false) }
-    if (loggedIn.value) {
-        navController.navigate(NavigationDestination.HomeScreen.name){
-            popUpTo(0)
+    LaunchedEffect(loggedIn.value) {
+        if (loggedIn.value) {
+            navController.navigate(NavigationDestination.HomeScreen.name) {
+                popUpTo(0)
+            }
         }
     }
     Column(modifier = Modifier.fillMaxSize()) {
@@ -163,31 +168,28 @@ fun LoginScreen(navController: NavController, authvm: AuthenticationViewModel) {
             Spacer(modifier = Modifier.height(30.dp))
             Button(
                 onClick = { authvm.logIn(email.value, password.value, onResult = { isSuccess, message ->
-                    if (isSuccess) {
-                        navController.navigate(NavigationDestination.HomeScreen.name){
-                            popUpTo(0)
-                        }
-                    } else {
-                        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
-                    }
                 }) },
                 modifier = Modifier.fillMaxWidth(),
                 colors = ButtonDefaults.buttonColors(Color.Blue),
                 shape = RoundedCornerShape(28.dp)
             ) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(
-                        text = "Sign in",
-                        fontFamily = poppins,
-                        color = Color.White,
-                        fontSize = 22.sp,
-                    )
-                    Icon(
-                        imageVector = Icons.Filled.Login,
-                        contentDescription = null,
-                        tint = Color.White,
-                        modifier = Modifier.size(30.dp)
-                    )
+                if (loading.value) {
+                    CircularProgressIndicator()
+                } else {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text(
+                            text = "Sign in",
+                            fontFamily = poppins,
+                            color = Color.White,
+                            fontSize = 22.sp,
+                        )
+                        Icon(
+                            imageVector = Icons.Filled.Login,
+                            contentDescription = null,
+                            tint = Color.White,
+                            modifier = Modifier.size(30.dp)
+                        )
+                    }
                 }
             }
             Spacer(modifier = Modifier.height(30.dp))

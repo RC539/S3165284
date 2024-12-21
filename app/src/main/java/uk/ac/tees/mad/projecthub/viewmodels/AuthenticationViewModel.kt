@@ -30,7 +30,9 @@ class AuthenticationViewModel @Inject constructor(
 
     init {
         isUserSignedIn.value = userRepository.isUserSignedIn()
-        fetchUserData()
+        if (isUserSignedIn.value) {
+            fetchUserData()
+        }
     }
 
     fun signUp(name: String, email: String, password: String, onResult: (Boolean, String?) -> Unit) {

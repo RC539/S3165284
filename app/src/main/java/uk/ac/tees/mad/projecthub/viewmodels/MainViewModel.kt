@@ -31,7 +31,13 @@ class MainViewModel @Inject constructor(
 
     private fun fetchProjects() {
         viewModelScope.launch {
-            projects.value = projectRepository.fetchProjects()
+            loading.value = true
+            val fetchedProjects = projectRepository.fetchProjects()
+            if (fetchedProjects != projects.value) {
+                // Only update if there's a change in the project list to avoid unnecessary recomposition
+                projects.value = fetchedProjects
+            }
+            loading.value = false
             Log.d("Projects", "Projects: ${projects.value}")
         }
     }
@@ -43,8 +49,8 @@ class MainViewModel @Inject constructor(
             getAllFromDB()
         }
     }
-    
-    private fun getAllFromDB(){
+
+    fun getAllFromDB(){
         viewModelScope.launch {
             offlineProjects.value = projectRepository.getAllFromDatabase()
             Log.d("Offline Projects", "Offline Projects: ${offlineProjects.value}")
