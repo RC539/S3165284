@@ -197,6 +197,17 @@ fun ProfileScreen(userVm: AuthenticationViewModel , onToggle:()->Unit , navContr
                                     fontWeight = FontWeight.SemiBold
                                 )
                             }
+                            Spacer(modifier = Modifier.height(20.dp))
+                            Button(onClick = {
+                                navController.navigate(NavigationDestination.OfflineScreen.name)
+                            }) {
+                                Text(
+                                    text = "Go to Saved Projects",
+                                    fontFamily = poppins,
+                                    color = colorScheme.onPrimary,
+                                    fontWeight = FontWeight.SemiBold
+                                )
+                            }
                             Spacer(modifier = Modifier.height(10.dp))
                             Row {
                                 Button(

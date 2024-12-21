@@ -16,6 +16,7 @@ import uk.ac.tees.mad.projecthub.data.model.ProjectModel
 import uk.ac.tees.mad.projecthub.screens.AddProjectScreen
 import uk.ac.tees.mad.projecthub.screens.HomeScreen
 import uk.ac.tees.mad.projecthub.screens.LoginScreen
+import uk.ac.tees.mad.projecthub.screens.OfflineScreen
 import uk.ac.tees.mad.projecthub.screens.ProfileScreen
 import uk.ac.tees.mad.projecthub.screens.ProjectDetailsScreen
 import uk.ac.tees.mad.projecthub.screens.SignupScreen
@@ -62,6 +63,9 @@ fun ProjectHubNavigation(onToggle:()-> Unit) {
             }
             composable(NavigationDestination.ProfileScreen.name) {
                 ProfileScreen(userVm = authvm, onToggle = {onToggle()}, navController)
+            }
+            composable(NavigationDestination.OfflineScreen.name) {
+                OfflineScreen(mainvm, navController)
             }
         }
     }

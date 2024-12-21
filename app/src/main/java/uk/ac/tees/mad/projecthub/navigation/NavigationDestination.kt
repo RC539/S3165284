@@ -10,7 +10,8 @@ enum class NavigationDestination {
     HomeScreen,
     AddProjectScreen,
     ProjectDetailScreen,
-    ProfileScreen
+    ProfileScreen,
+    OfflineScreen
 }
 
 
