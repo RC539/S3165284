@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Surface
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
@@ -25,6 +26,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -87,15 +89,15 @@ fun ProjectCardView(project: ProjectData){
         Column {
             Row {
                 AsyncImage(model = project.imageUrl, contentDescription = null,
-                    modifier = Modifier.size(180.dp))
+                    modifier = Modifier.size(180.dp).clip(RoundedCornerShape(12.dp)), contentScale = androidx.compose.ui.layout.ContentScale.Crop)
                 Column {
-                    Text(text = project.projectName)
-                    Text(text = project.projectDescription)
-                    Text(text = project.requiredSkills)
+                    Text(text = project.projectName, fontFamily = poppins, fontWeight = FontWeight.Bold)
+                    Text(text = project.projectDescription, fontFamily = poppins, fontWeight = FontWeight.Normal)
+                    Text(text = "Required Skills :- ${project.requiredSkills}", fontFamily = poppins, fontWeight = FontWeight.SemiBold)
                 }
             }
-            Text(text = project.budget)
-            Text(text = project.deadline)
+            Text(text = "Project Budget :- ${project.budget}", fontFamily = poppins, fontWeight = FontWeight.SemiBold)
+            Text(text = "Project Deadline :- ${project.deadline}", fontFamily = poppins, fontWeight = FontWeight.SemiBold)
         }
     }
 }
