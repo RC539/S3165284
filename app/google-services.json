@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "609551524537",
-    "project_id": "projecthub-42955",
+    "project_number": "337432579700",
+    "project_id": "projecthub-6a913",
     "storage_bucket": "projecthub-42955.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:609551524537:android:ebbee80647034fa987b168",
+        "mobilesdk_app_id": "1:337432579700:android:005799910a18ab60940b21",
         "android_client_info": {
           "package_name": "uk.ac.tees.mad.projecthub"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyA5_nuXXmjyP2MOCjzDxQIc930SfbNz-YA"
+          "current_key": "AIzaSyBq2oh3I8DpEcdpPVTwaOOS23XXliN5tiU"
         }
       ],
       "services": {
